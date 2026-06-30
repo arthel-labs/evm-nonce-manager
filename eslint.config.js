@@ -21,6 +21,9 @@ export default [
     },
     rules: {
       ...tseslint.configs.recommended.rules,
+      // TypeScript's own checker handles undefined references; no-undef misfires
+      // on type-only names and Node globals, so defer to tsc here.
+      'no-undef': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-unused-vars': [
