@@ -7,12 +7,7 @@
  *
  * NEVER point this at a real network — Anvil / a local devnet only.
  */
-import {
-  createPublicClient,
-  createWalletClient,
-  http,
-  type PublicClient,
-} from 'viem';
+import { createPublicClient, createWalletClient, http, type PublicClient } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { foundry } from 'viem/chains';
 import { createNonceManager } from '../src/index.js';

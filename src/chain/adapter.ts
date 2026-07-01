@@ -49,10 +49,18 @@ export class ChainAdapter {
     expectedNonce: number,
   ): NonceTooLowError | NonceTooHighError | undefined {
     const text = errorText(error).toLowerCase();
-    if (text.includes('nonce too low') || text.includes('already known') || text.includes('already imported')) {
+    if (
+      text.includes('nonce too low') ||
+      text.includes('already known') ||
+      text.includes('already imported')
+    ) {
       return new NonceTooLowError(account, attemptedNonce, error);
     }
-    if (text.includes('nonce too high') || text.includes('nonce gap') || text.includes('too high')) {
+    if (
+      text.includes('nonce too high') ||
+      text.includes('nonce gap') ||
+      text.includes('too high')
+    ) {
       return new NonceTooHighError(account, attemptedNonce, expectedNonce, error);
     }
     return undefined;

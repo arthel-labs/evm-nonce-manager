@@ -137,10 +137,7 @@ export function status(state: PersistedNonceState): NonceStatus {
  * Set the confirmed pointer (up or down) and re-establish invariants: `next`
  * never below `confirmed`, and `released` trimmed to the in-range window.
  */
-function normalizeToConfirmed(
-  state: PersistedNonceState,
-  confirmed: number,
-): PersistedNonceState {
+function normalizeToConfirmed(state: PersistedNonceState, confirmed: number): PersistedNonceState {
   const next = Math.max(state.next, confirmed);
   const released = state.released.filter((n) => n >= confirmed && n < next);
   return { confirmed, next, released };

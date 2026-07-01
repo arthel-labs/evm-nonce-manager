@@ -12,7 +12,10 @@ import { InvalidNonceError } from '../src/errors.js';
 import type { PersistedNonceState } from '../src/types.js';
 
 /** Allocate `n` nonces in sequence, threading state. */
-function allocateMany(start: PersistedNonceState, n: number): { state: PersistedNonceState; nonces: number[] } {
+function allocateMany(
+  start: PersistedNonceState,
+  n: number,
+): { state: PersistedNonceState; nonces: number[] } {
   let state = start;
   const nonces: number[] = [];
   for (let i = 0; i < n; i++) {

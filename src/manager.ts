@@ -78,7 +78,11 @@ export function createNonceManager(opts: NonceManagerOptions): NonceManager {
    */
   async function withState<T>(
     account: Address,
-    fn: (state: PersistedNonceState) => { state: PersistedNonceState; result: T } | Promise<{ state: PersistedNonceState; result: T }>,
+    fn: (
+      state: PersistedNonceState,
+    ) =>
+      | { state: PersistedNonceState; result: T }
+      | Promise<{ state: PersistedNonceState; result: T }>,
   ): Promise<T> {
     const id = await chainId();
     const key = makeKey(id, account);
@@ -143,7 +147,10 @@ export function createNonceManager(opts: NonceManagerOptions): NonceManager {
     release,
 
     async confirm(account: Address, nonce: number): Promise<void> {
-      return withState(account, (state) => ({ state: sm.confirm(state, nonce), result: undefined }));
+      return withState(account, (state) => ({
+        state: sm.confirm(state, nonce),
+        result: undefined,
+      }));
     },
 
     resync,

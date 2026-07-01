@@ -25,13 +25,13 @@ On EVM chains every account's transactions must have **strictly sequential
 nonces**. In any system that sends transactions — especially concurrently —
 naive nonce handling breaks in ways that are painful and money-adjacent:
 
-| Failure mode | What happens without a nonce manager |
-| --- | --- |
-| **Concurrent sends** | Two parallel sends read the same nonce → one tx is rejected. |
-| **Failed broadcast** | A nonce is "used" but the tx never lands → a permanent **gap** forms and *every* later tx gets stuck behind it. |
-| **Stuck pending tx** | An underpriced tx sits pending forever → everything queues behind it. |
-| **Process restart** | In-memory nonce state is lost and drifts from chain reality. |
-| **Chain reorg** | The confirmed nonce effectively moves backwards. |
+| Failure mode         | What happens without a nonce manager                                                                            |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Concurrent sends** | Two parallel sends read the same nonce → one tx is rejected.                                                    |
+| **Failed broadcast** | A nonce is "used" but the tx never lands → a permanent **gap** forms and _every_ later tx gets stuck behind it. |
+| **Stuck pending tx** | An underpriced tx sits pending forever → everything queues behind it.                                           |
+| **Process restart**  | In-memory nonce state is lost and drifts from chain reality.                                                    |
+| **Chain reorg**      | The confirmed nonce effectively moves backwards.                                                                |
 
 A correct nonce manager makes these **survivable instead of catastrophic**.
 That recovery behavior — not the happy path — is the point of this library.
@@ -96,14 +96,14 @@ Chain nonce now : 25 (expected 25)
 
 ### `createNonceManager(options)`
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `client` | `PublicClient` | — | Viem public client. Its `chain.id` keys all state. |
-| `store` | `NonceStore` | `InMemoryNonceStore` | Persistence backend (see below). |
-| `reconcileOnStart` | `boolean` | `true` | Reconcile persisted state against the chain on first use of each account. |
-| `reconcileIntervalMs` | `number` | off | Periodically reconcile every seen account. Call `stop()` on shutdown. |
-| `initBlockTag` | `'pending' \| 'latest'` | `'pending'` | Seed source for the allocation watermark. |
-| `defaultFeeBumpPercent` | `number` | `10` | Default fee bump for replacements/cancellations. |
+| Option                  | Type                    | Default              | Description                                                               |
+| ----------------------- | ----------------------- | -------------------- | ------------------------------------------------------------------------- |
+| `client`                | `PublicClient`          | —                    | Viem public client. Its `chain.id` keys all state.                        |
+| `store`                 | `NonceStore`            | `InMemoryNonceStore` | Persistence backend (see below).                                          |
+| `reconcileOnStart`      | `boolean`               | `true`               | Reconcile persisted state against the chain on first use of each account. |
+| `reconcileIntervalMs`   | `number`                | off                  | Periodically reconcile every seen account. Call `stop()` on shutdown.     |
+| `initBlockTag`          | `'pending' \| 'latest'` | `'pending'`          | Seed source for the allocation watermark.                                 |
+| `defaultFeeBumpPercent` | `number`                | `10`                 | Default fee bump for replacements/cancellations.                          |
 
 ### Methods
 
@@ -129,7 +129,7 @@ manager.stop()                     // clear the reconcile interval, if any
 `status` returns `{ confirmed, allocated, inFlight }`:
 
 - `confirmed` — next nonce the chain expects for a brand-new confirmed tx.
-- `allocated` — the high-water mark (next *fresh* nonce that would be handed out).
+- `allocated` — the high-water mark (next _fresh_ nonce that would be handed out).
 - `inFlight` — nonces handed out but neither confirmed nor released.
 
 ### Errors
@@ -169,11 +169,11 @@ flowchart TD
   serializes state transitions for a single `(chainId, account)` so allocation
   is race-free, while different accounts proceed fully in parallel. Idle locks
   are garbage-collected so a long-lived manager doesn't leak.
-- **Reuse before extend.** A failed allocation is returned to a *released* set
+- **Reuse before extend.** A failed allocation is returned to a _released_ set
   and reused before the watermark advances, so a failed broadcast never leaves
   a permanent gap.
-- **`confirm` only moves forward.** On EVM, a tx with nonce *n* can only be
-  mined once every nonce `< n` is mined, so observing *n* confirmed advances the
+- **`confirm` only moves forward.** On EVM, a tx with nonce _n_ can only be
+  mined once every nonce `< n` is mined, so observing _n_ confirmed advances the
   pointer to `n + 1`. Reorg regressions are handled by `reconcile`, not
   `confirm`, keeping the model simple and correct.
 - **Async all the way down.** `peek`/`allocate`/… return promises so a

@@ -10,12 +10,7 @@ export { createNonceManager } from './manager.js';
 export { InMemoryNonceStore } from './store/memory-store.js';
 export { makeKey } from './internal/keys.js';
 
-export {
-  MIN_REPLACEMENT_BUMP_PERCENT,
-  bumpFees,
-  bumpValue,
-  isEip1559,
-} from './replacement.js';
+export { MIN_REPLACEMENT_BUMP_PERCENT, bumpFees, bumpValue, isEip1559 } from './replacement.js';
 
 export {
   NonceManagerError,
